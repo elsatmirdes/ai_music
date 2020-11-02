@@ -92,12 +92,12 @@ class App(QtWidgets.QMainWindow):
 
         chors = []
         chords = [
-            "A C2 E2",  # Am
-            "A2 D F2",  # Dm
+            "A4 C4 E4",  # Am
+            "A2 D2 F2",  # Dm
             "B B2 G2 B4 E",  # Em
-            "G B2 D2",  # G
-            "F A2 C2",  # F
-            "G2 C E2",  # C
+            "G4 B4 D4",  # G
+            "F4 A4 C4",  # F
+            "G4 C4 E4",  # C
             "G2 B E2"  # B
         ]
 
@@ -130,6 +130,27 @@ class App(QtWidgets.QMainWindow):
             midi.seq_notes(self.active_nota(C_major,dur), track=0, channel=4)
             midi.write("midi/musicActive.midi")
 
+    def sad_chord(self):
+        chors = []
+        chords = [
+            "A8 C8 E8",  # Am
+            "A8 D8 F8",  # Dm
+            "B B2 G2 B4 E",  # Em
+            "G8 B8 D8",  # G
+            "F2 A2 C2",  # F
+            "G4 C4 E4",  # C
+            "G2 B E2"  # B
+        ]
+
+        say = 0
+        while True:
+            r = random.randint(0, 6)
+            nota_add = NoteSeq(chords[r]).retrograde()
+            chors.append(nota_add)
+            say += 1
+            if say == self.nota_number():
+                break
+        return chors
 
     def sad_music(self):
         C_major = {
@@ -142,8 +163,8 @@ class App(QtWidgets.QMainWindow):
         time = 0
         for i in range(self.nota_number()):
             midi = Midi(2, tempo=60, instrument=[40, 60])
-            midi.seq_chords(self.active_chord(), track=0, time=time+0.5, channel=3)
-            midi.seq_notes(self.active_nota(C_major, dur), track=0, channel=3, time=time+1)
+            midi.seq_chords(self.sad_chord(), track=0, channel=3)
+            midi.seq_notes(self.active_nota(C_major, dur), track=0, channel=3)
             midi.write("midi/musicSad.midi")
             time += 1
 
