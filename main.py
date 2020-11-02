@@ -116,15 +116,20 @@ class App(QtWidgets.QMainWindow):
             "A", "B", "C", "D", "E", "F", "G"
         }
 
+        C_major = {
+            "C", "A", "B", "D", "E", "F", "G"
+        }
+
         dur = {
             "2", "4", "8", "16"
         }
-
         for i in range(self.nota_number()):
-            midi = Midi(2, tempo=120, instrument=[40, 60])
-            midi.seq_chords(self.active_chord(), track=0, time=0.5, channel=3)
-            midi.seq_notes(self.active_nota(A_major, dur), track=0, channel=3, time=1)
+            midi = Midi(2, tempo=120, channel=[0,9], instrument=[40, 60, 80])
+            midi.seq_chords(self.active_chord(), track=0, channel=1)
+            midi.seq_chords(self.active_chord(), track=1, channel=9)
+            midi.seq_notes(self.active_nota(C_major,dur), track=0, channel=4)
             midi.write("midi/musicActive.midi")
+
 
     def sad_music(self):
         C_major = {
@@ -134,12 +139,13 @@ class App(QtWidgets.QMainWindow):
         dur = {
             "4", "8", "16"
         }
-
+        time = 0
         for i in range(self.nota_number()):
             midi = Midi(2, tempo=60, instrument=[40, 60])
-            midi.seq_chords(self.active_chord(), track=0, time=0.5, channel=3)
-            midi.seq_notes(self.active_nota(C_major, dur), track=0, channel=3, time=1)
+            midi.seq_chords(self.active_chord(), track=0, time=time+0.5, channel=3)
+            midi.seq_notes(self.active_nota(C_major, dur), track=0, channel=3, time=time+1)
             midi.write("midi/musicSad.midi")
+            time += 1
 
     def createMusic(self):
         if self.translate_and_analysis()>0.0:
