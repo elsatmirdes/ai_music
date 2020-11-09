@@ -29,6 +29,9 @@ class App(QtWidgets.QMainWindow):
         if self.translate_and_analysis()>0.0:
             midi_file = 'midi/musicActive.midi'
 
+        if self.translate_and_analysis() == 0.0:
+            midi_file = "midi/nMusic.midi"
+
         freq = 44100  # audio CD quality
         bitsize = -16  # unsigned 16 bit
         channels = 2  # 1 is mono, 2 is stereo
@@ -50,10 +53,8 @@ class App(QtWidgets.QMainWindow):
     # -1<x<1
     def translate_and_analysis(self):
         metin = self.ui.sentence.toPlainText()
-
         translation = self.translator.translate(metin, src='tr', dest='en')
         metin_eng = translation.text
-
         # analysis
         sid = SentimentIntensityAnalyzer()
 
@@ -64,12 +65,10 @@ class App(QtWidgets.QMainWindow):
     # nota number
     def nota_number(self):
         metin = self.ui.sentence.toPlainText()
-        # translation = self.translator.translate(metin, src='tr', dest='en')
-        # metin_eng = translation.text
         syllables = get_syllables(u'{}'.format(metin))
 
         nota_n = 0
-        for i in syllables:
+        for n in syllables:
             nota_n += 1
 
         return nota_n
@@ -123,12 +122,23 @@ class App(QtWidgets.QMainWindow):
         dur = {
             "2", "4", "8", "16"
         }
+
+        if self.translate_and_analysis() >= 0.0 or self.translate_and_analysis() < 0.3000:
+            tempo = 120
+
+        if self.translate_and_analysis() > 0.4000 or self.translate_and_analysis() < 0.5000:
+            tempo = 140
+
+        if self.translate_and_analysis() > 0.5000:
+            tempo = 160
+
         for i in range(self.nota_number()):
-            midi = Midi(2, tempo=120, channel=[0,9], instrument=[40, 60, 80])
+            midi = Midi(2, tempo=tempo, channel=[0,9], instrument=[40, 60, 80])
             midi.seq_chords(self.active_chord(), track=0, channel=1)
             midi.seq_chords(self.active_chord(), track=1, channel=9)
             midi.seq_notes(self.active_nota(C_major,dur), track=0, channel=4)
             midi.write("midi/musicActive.midi")
+        print(tempo)
 
     def sad_chord(self):
         chors = []
@@ -161,21 +171,53 @@ class App(QtWidgets.QMainWindow):
             "4", "8", "16"
         }
         time = 0
+
+        if self.translate_and_analysis() <= 0.0 or self.translate_and_analysis() > -0.2000:
+            tempo = 60
+
+        if self.translate_and_analysis() < -0.3000 or self.translate_and_analysis() > -0.4000:
+            tempo = 50
+
+        if self.translate_and_analysis() <= -0.5000:
+            tempo = 40
+
         for i in range(self.nota_number()):
-            midi = Midi(2, tempo=60, instrument=[40, 60])
+            midi = Midi(2, tempo=tempo, instrument=[40, 60])
             midi.seq_chords(self.sad_chord(), track=0, channel=3)
             midi.seq_notes(self.active_nota(C_major, dur), track=0, channel=3)
             midi.write("midi/musicSad.midi")
             time += 1
+        print(tempo)
+
+    def notr_music(self):
+        C_major = {
+            "C", "B", "A", "D", "E", "F", "G"
+        }
+
+        dur = {
+            "2","4", "8", "16"
+        }
+
+        time = 0
+        for i in range(self.nota_number()):
+            midi = Midi(2, tempo=80, instrument=[40, 60])
+            midi.seq_chords(self.sad_chord(), track=0, channel=3)
+            midi.seq_notes(self.active_nota(C_major, dur), track=0, channel=3)
+            midi.write("midi/nMusic.midi")
+            time += 1
 
     def createMusic(self):
-        if self.translate_and_analysis()>0.0:
+        if self.translate_and_analysis() > 0.0:
             QMessageBox.information(self,"Created Music","\nOlumlu cümle girdiniz. Müzik başarıyla oluştruldu.\n")
             self.active_music()
 
-        if self.translate_and_analysis()<0.0:
+        if self.translate_and_analysis() < 0.0:
             QMessageBox.information(self, "Created Music", "\nNegatif cümle girdiniz. Müzik başarıyla oluştruldu.\n")
             self.sad_music()
+
+        if self.translate_and_analysis() == 0.0:
+            QMessageBox.information(self, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
+            self.notr_music()
 
 def run():
     ap = QtWidgets.QApplication(sys.argv)
