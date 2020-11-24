@@ -215,8 +215,10 @@ class App(QtWidgets.QMainWindow):
             time += 1
 
     def createMusic(self):
+        location_file = str(os.getcwd())
+        replace = location_file.replace("\\", "/")
         qmsgBox = QMessageBox()
-        qmsgBox.setStyleSheet('background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;')
+        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
 
         if self.translate_and_analysis() > 0.0:
             QMessageBox.information(qmsgBox,"Created Music","\nOlumlu cümle girdiniz. Müzik başarıyla oluştruldu.\n")
