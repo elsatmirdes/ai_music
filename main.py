@@ -10,6 +10,7 @@ from listen import play_music
 import pygame
 import sys
 import os
+import time
 import random
 
 class App(QtWidgets.QMainWindow):
@@ -69,7 +70,7 @@ class App(QtWidgets.QMainWindow):
 
         return float(positive_or_negative)
 
-    # nota number
+    # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
     def nota_number(self):
         metin = self.ui.sentence.toPlainText()
         syllables = get_syllables(u'{}'.format(metin))
@@ -220,15 +221,17 @@ class App(QtWidgets.QMainWindow):
         qmsgBox = QMessageBox()
         qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
 
-        if self.translate_and_analysis() > 0.0:
+        analiz_sonucu = self.translate_and_analysis()
+
+        if analiz_sonucu > 0.0:
             QMessageBox.information(qmsgBox,"Created Music","\nOlumlu cümle girdiniz. Müzik başarıyla oluştruldu.\n")
             self.active_music()
 
-        elif self.translate_and_analysis() < 0.0:
+        elif analiz_sonucu < 0.0:
             QMessageBox.information(qmsgBox, "Created Music", "\nNegatif cümle girdiniz. Müzik başarıyla oluştruldu.\n")
             self.sad_music()
 
-        elif self.translate_and_analysis() == 0.0:
+        elif analiz_sonucu == 0.0:
             QMessageBox.information(qmsgBox, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
             self.notr_music()
 
