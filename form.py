@@ -17,10 +17,10 @@ class Ui_MainWindow(object):
         MainWindow.resize(404, 419)
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
-        MainWindow.setWindowIcon(QtGui.QIcon(f"background:url({replace}/images/indir.png);"))
+        # MainWindow.setWindowIcon(QtGui.QIcon(f"{replace}/icon.ico);"))
         MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
 
-        # MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png")) exe çevirirken kullan
+        MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))# exe çevirirken kullan
         # MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
 
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
 "")
         self.sentence.setObjectName("sentence")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(160, 80, 87, 31))
+        self.label.setGeometry(QtCore.QRect(160, 80, 92, 31))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -125,4 +125,4 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'System\'; font-size:12pt; font-weight:72; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:-2px; margin-left:0px; margin-right:14px; -qt-block-indent:0; text-indent:0px; line-height:10px; background-color:transparent;\"><br /></p></body></html>"))
         self.sentence.setPlaceholderText(_translate("MainWindow", "Write something"))
-        self.label.setText(_translate("MainWindow", "Metin Girişi"))
+        self.label.setText(_translate("MainWindow", "Cümle Girişi"))

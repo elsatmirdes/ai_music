@@ -10,7 +10,6 @@ from listen import play_music
 import pygame
 import sys
 import os
-import time
 import random
 
 class App(QtWidgets.QMainWindow):
@@ -31,13 +30,27 @@ class App(QtWidgets.QMainWindow):
         self.ui.playbutton.clicked.connect(self.play_music)
 
     def play_music(self):
-        if self.translate_and_analysis()<0.0:
-            midi_file = 'midi/musicSad.midi'
-        if self.translate_and_analysis()>0.0:
-            midi_file = 'midi/musicActive.midi'
+        location_file = str(os.getcwd())
+        replace = location_file.replace("\\", "/")
+        qmsgBox = QMessageBox()
+        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
 
-        if self.translate_and_analysis() == 0.0:
-            midi_file = "midi/nMusic.midi"
+        pos_or_neg = self.translate_and_analysis()
+        try:
+            if pos_or_neg < 0.0:
+                midi_file = 'midi/musicSad.midi'
+
+            elif pos_or_neg > 0.0:
+                midi_file = 'midi/musicActive.midi'
+
+            elif pos_or_neg == 0.0:
+                midi_file = "midi/nMusic.midi"
+
+        except Exception:
+            QMessageBox.critical(qmsgBox,"Error","Not found with play midi file")
+
+        finally:
+            pass
 
         freq = 44100  # audio CD quality
         bitsize = -16  # unsigned 16 bit
@@ -60,15 +73,15 @@ class App(QtWidgets.QMainWindow):
     # -1<x<1
     def translate_and_analysis(self):
         # translate
-        metin = self.ui.sentence.toPlainText()
-        translation = self.translator.translate(metin)
+        metin = self.ui.sentence.toPlainText() # cümle alınır
+        translation = self.translator.translate(metin) # ingilizceye çevirilir
         metin_eng = translation.text
 
         # analysis
         sid = SentimentIntensityAnalyzer()
         positive_or_negative = sid.polarity_scores(metin_eng)
 
-        return float(positive_or_negative)
+        return positive_or_negative # -1 ile 1 arasında değer döndürür (float)
 
     # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
     def nota_number(self):
@@ -118,36 +131,6 @@ class App(QtWidgets.QMainWindow):
                 break
         return chors
 
-    def active_music(self):
-        A_major = {
-            "A", "B", "C", "D", "E", "F", "G"
-        }
-
-        C_major = {
-            "C", "A", "B", "D", "E", "F", "G"
-        }
-
-        dur = {
-            "2", "4", "8", "16"
-        }
-
-        if self.translate_and_analysis() > 0.0 or self.translate_and_analysis() < 0.3000:
-            tempo = 120
-
-        if self.translate_and_analysis() > 0.4000 or self.translate_and_analysis() < 0.5000:
-            tempo = 140
-
-        if self.translate_and_analysis() > 0.5000:
-            tempo = 160
-
-        for i in range(self.nota_number()):
-            midi = Midi(2, tempo=tempo, channel=[0,9], instrument=[40, 60, 80])
-            midi.seq_notes(self.nota(A_major,dur), track=0, channel=3)
-            midi.seq_notes(self.nota(A_major,dur), track=1, channel=2)
-            midi.seq_chords(self.active_chord(), track=0, channel=9)
-            midi.write("midi/musicActive.midi")
-        print(tempo)
-
     def sad_chord(self):
         chors = []
         chords = [
@@ -169,6 +152,34 @@ class App(QtWidgets.QMainWindow):
             if say == self.nota_number():
                 break
         return chors
+
+    def active_music(self):
+        A_major = {
+            "A", "B", "C", "D", "E", "F", "G"
+        }
+
+        dur = {
+            "2", "4", "8", "16"
+        }
+
+        if self.translate_and_analysis() > 0.0 or self.translate_and_analysis() < 0.3000:
+            tempo = 120
+
+        if self.translate_and_analysis() > 0.4000 or self.translate_and_analysis() < 0.5000:
+            tempo = 140
+
+        if self.translate_and_analysis() > 0.5000:
+            tempo = 160
+
+        for i in range(self.nota_number()):
+            midi = Midi(2, tempo=tempo, channel=[0,9], instrument=[20,40,60])
+            midi.seq_notes(self.nota(A_major,dur), track=0, channel=2)
+            midi.seq_notes(self.nota(A_major,dur), track=1, channel=9)
+            # midi.seq_chords(self.active_chord(), track=0, channel=1)
+            midi.seq_chords(self.active_chord(), track=0, channel=1)
+            midi.write("midi/musicActive.midi")
+
+        print(tempo)
 
     def sad_music(self):
         C_major = {
@@ -192,7 +203,8 @@ class App(QtWidgets.QMainWindow):
         for i in range(self.nota_number()):
             midi = Midi(2, tempo=tempo, instrument=[40, 60])
             midi.seq_chords(self.sad_chord(), track=0, channel=3)
-            midi.seq_notes(self.nota(C_major, dur), track=0, channel=3)
+            midi.seq_notes(self.nota(C_major, dur), track=0, channel=1)
+            midi.seq_notes(self.nota(C_major, dur), track=1, channel=2)
             midi.write("midi/musicSad.midi")
             time += 1
         print(tempo)
@@ -221,14 +233,15 @@ class App(QtWidgets.QMainWindow):
         qmsgBox = QMessageBox()
         qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
 
+
         analiz_sonucu = self.translate_and_analysis()
 
         if analiz_sonucu > 0.0:
-            QMessageBox.information(qmsgBox,"Created Music","\nOlumlu cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+            QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
             self.active_music()
 
         elif analiz_sonucu < 0.0:
-            QMessageBox.information(qmsgBox, "Created Music", "\nNegatif cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+            QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
             self.sad_music()
 
         elif analiz_sonucu == 0.0:
