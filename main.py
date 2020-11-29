@@ -40,7 +40,7 @@ class App(QtWidgets.QMainWindow):
                 midi_file = 'midi/musicActive.midi'
 
             elif pos_or_neg == 0.0:
-                midi_file = "midi/nMusic.midi"
+                midi_file = "midi/nötrMusic.midi"
 
         except TypeError:
             pass
