@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,QtGui,QtCore
 from PyQt5.QtWidgets import QMessageBox
 from form import Ui_MainWindow
 from pyknon.music import NoteSeq
@@ -11,7 +11,7 @@ import pygame
 import sys
 import os
 import random
-
+import time
 class App(QtWidgets.QMainWindow):
 
     def __init__(self):
@@ -28,15 +28,11 @@ class App(QtWidgets.QMainWindow):
 
         self.ui.createbutton.clicked.connect(self.createMusic)
         self.ui.playbutton.clicked.connect(self.play_music)
+        self.ui.extractAction.triggered.connect(self.exit)
 
     def play_music(self):
-        location_file = str(os.getcwd())
-        replace = location_file.replace("\\", "/")
-        qmsgBox = QMessageBox()
-        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
-
-        pos_or_neg = self.translate_and_analysis()
         try:
+            pos_or_neg = self.translate_and_analysis()
             if pos_or_neg < 0.0:
                 midi_file = 'midi/musicSad.midi'
 
@@ -46,11 +42,9 @@ class App(QtWidgets.QMainWindow):
             elif pos_or_neg == 0.0:
                 midi_file = "midi/nMusic.midi"
 
-        except Exception:
-            QMessageBox.critical(qmsgBox,"Error","Not found with play midi file")
-
-        finally:
+        except TypeError:
             pass
+
 
         freq = 44100  # audio CD quality
         bitsize = -16  # unsigned 16 bit
@@ -63,25 +57,36 @@ class App(QtWidgets.QMainWindow):
         try:
             play_music(midi_file)
 
-        except KeyboardInterrupt:
-            # if user hits Ctrl/C then exit
-            # (works only in console mode)
-            pygame.mixer.music.fadeout(1000)
-            pygame.mixer.music.stop()
-            raise SystemExit
+        except UnboundLocalError:
+            location_file = str(os.getcwd())
+            replace = location_file.replace("\\", "/")
+            qmsgBox = QMessageBox()
+            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oynatılırken hata oluştu\nOluşturulan müzik oynatılır. Önce müzik oluştur.\n")
 
     # -1<x<1
     def translate_and_analysis(self):
-        # translate
-        metin = self.ui.sentence.toPlainText() # cümle alınır
-        translation = self.translator.translate(metin) # ingilizceye çevirilir
-        metin_eng = translation.text
+        say = 0
 
-        # analysis
-        sid = SentimentIntensityAnalyzer()
-        positive_or_negative = sid.polarity_scores(metin_eng)
+        try:
+            # translate
+            metin = self.ui.sentence.toPlainText() # cümle alınır
+            translation = self.translator.translate(metin) # ingilizceye çevirilir
+            metin_eng = translation.text
 
-        return positive_or_negative # -1 ile 1 arasında değer döndürür (float)
+            # analysis
+            sid = SentimentIntensityAnalyzer()
+            positive_or_negative = sid.polarity_scores(metin_eng)
+            return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
+
+        except AttributeError:
+            location_file = str(os.getcwd())
+            replace = location_file.replace("\\", "/")
+            qmsgBox = QMessageBox()
+            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu tekrar deneyin.\nDevam ederse kapatıp tekrar açın.\n")
 
     # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
     def nota_number(self):
@@ -135,13 +140,14 @@ class App(QtWidgets.QMainWindow):
         chors = []
         chords = [
             "A8 C8 E8",  # Am
-            "A8 D8 F8",  # Dm
-            "B B2 G2 B4 E",  # Em
-            "G8 B8 D8",  # G
-            "F2 A2 C2",  # F
+            "A2 D2 F2",  # Dm
+            "B4 B4 G4 B4 E2",  # Em
+            "G4 B4 D4",  # G
+            "F4 A4 C4",  # F
             "G4 C4 E4",  # C
-            "G2 B E2"  # B
+            "G2 B2 E2"  # B
         ]
+
 
         say = 0
         while True:
@@ -150,6 +156,7 @@ class App(QtWidgets.QMainWindow):
             chors.append(nota_add)
             say += 1
             if say == self.nota_number():
+                chors.append(NoteSeq("F2 A2 C2"))
                 break
         return chors
 
@@ -177,19 +184,19 @@ class App(QtWidgets.QMainWindow):
             midi.seq_notes(self.nota(A_major,dur), track=1, channel=9)
             # midi.seq_chords(self.active_chord(), track=0, channel=1)
             midi.seq_chords(self.active_chord(), track=0, channel=1)
-            midi.write("midi/musicActive.midi")
+            midi.write(f"midi/musicActive.midi")
 
         print(tempo)
 
     def sad_music(self):
         C_major = {
-            "C", "B", "A", "D", "E", "F", "G"
+            "A", "B", "C", "D", "E", "F"
         }
 
         dur = {
             "4", "8", "16"
         }
-        time = 0
+
 
         if self.translate_and_analysis() < 0.0 or self.translate_and_analysis() > -0.2000:
             tempo = 60
@@ -199,14 +206,16 @@ class App(QtWidgets.QMainWindow):
 
         if self.translate_and_analysis() <= -0.5000:
             tempo = 40
-
+        time = 0
         for i in range(self.nota_number()):
-            midi = Midi(2, tempo=tempo, instrument=[40, 60])
+            midi = Midi(2, tempo=tempo,channel=[0,9], instrument=[40, 60])
             midi.seq_chords(self.sad_chord(), track=0, channel=3)
             midi.seq_notes(self.nota(C_major, dur), track=0, channel=1)
-            midi.seq_notes(self.nota(C_major, dur), track=1, channel=2)
+            # midi.seq_notes(self.nota(C_major, dur), track=1, channel=2)
             midi.write("midi/musicSad.midi")
             time += 1
+
+        print(self.sad_chord()[-1])
         print(tempo)
 
     def notr_music(self):
@@ -224,7 +233,7 @@ class App(QtWidgets.QMainWindow):
             midi.seq_chords(self.sad_chord(), track=0, channel=3)
             midi.seq_notes(self.nota(C_major, dur), track=0, channel=3)
 
-            midi.write("midi/nMusic.midi")
+            midi.write("midi/nötrMusic.midi")
             time += 1
 
     def createMusic(self):
@@ -235,21 +244,24 @@ class App(QtWidgets.QMainWindow):
 
 
         analiz_sonucu = self.translate_and_analysis()
+        try:
+            if analiz_sonucu > 0.0:
+                QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+                self.active_music()
 
-        if analiz_sonucu > 0.0:
-            QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
-            self.active_music()
+            elif analiz_sonucu < 0.0:
+                QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+                self.sad_music()
 
-        elif analiz_sonucu < 0.0:
-            QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
-            self.sad_music()
+            elif analiz_sonucu == 0.0:
+                QMessageBox.information(qmsgBox, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
+                self.notr_music()
 
-        elif analiz_sonucu == 0.0:
-            QMessageBox.information(qmsgBox, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
-            self.notr_music()
+        except TypeError:
+            pass
 
-        else:
-            QMessageBox.information(qmsgBox,"Could not be created","\nMüzik Oluşurulamadı\n")
+    def exit(self):
+        QtWidgets.qApp.quit()
 
 def run():
     ap = QtWidgets.QApplication(sys.argv)

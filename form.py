@@ -9,18 +9,30 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QAction
 import os
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(404, 419)
+
+        self.extractAction = QAction("&Kapat",MainWindow)
+        self.extractAction.setShortcut("Ctrl+Q")
+        self.extractAction.setStatusTip('Kapat')
+
+        mainMenu = MainWindow.menuBar()
+        fileMenu = mainMenu.addMenu("&File") # menubar help
+
+        fileMenu.addAction(self.extractAction)
+
+
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
-        # MainWindow.setWindowIcon(QtGui.QIcon(f"{replace}/icon.ico);"))
         MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
+        MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
-        MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))# exe çevirirken kullan
+        # exe çevirirken kullan
         # MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
 
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)

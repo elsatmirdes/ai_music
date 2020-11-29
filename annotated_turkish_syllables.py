@@ -73,4 +73,5 @@ def get_syllables(word):
 
 
 
-# zaman  = get_syllables(u'merhaba dünya')
+# zaman  = get_syllables(u'trabzonspor')
+# print(zaman)
