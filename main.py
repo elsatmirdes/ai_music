@@ -11,7 +11,8 @@ import pygame
 import sys
 import os
 import random
-import time
+
+
 class App(QtWidgets.QMainWindow):
 
     def __init__(self):
@@ -67,8 +68,6 @@ class App(QtWidgets.QMainWindow):
 
     # -1<x<1
     def translate_and_analysis(self):
-        say = 0
-
         try:
             # translate
             metin = self.ui.sentence.toPlainText() # cümle alınır
