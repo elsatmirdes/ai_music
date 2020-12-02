@@ -21,19 +21,36 @@ class Ui_MainWindow(object):
         self.extractAction.setShortcut("Ctrl+Q")
         self.extractAction.setStatusTip('Kapat')
 
+        self.listen_pos = QAction("&Pozitif Müzik",MainWindow)
+        self.listen_pos.setShortcut("Ctrl+P")
+        self.listen_pos.setStatusTip('Pozitif Müziği Dinle')
+
+        self.listen_notr = QAction("&Nötr Müzik",MainWindow)
+        self.listen_notr.setShortcut("Ctrl+O")
+        self.listen_notr.setStatusTip('Nötr Müziği Dinle')
+
+        self.listen_neg = QAction("&Negatif Müzik",MainWindow)
+        self.listen_neg.setShortcut("Ctrl+N")
+        self.listen_neg.setStatusTip('Negatif Müziği Dinle')
+
         mainMenu = MainWindow.menuBar()
         fileMenu = mainMenu.addMenu("&File") # menubar help
-
+        mainMenu.setStyleSheet("color:green;")
         fileMenu.addAction(self.extractAction)
+        fileMenu.addAction(self.listen_pos)
+        fileMenu.addAction(self.listen_notr)
+        fileMenu.addAction(self.listen_neg)
+
 
 
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
-        # MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
-        MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+        MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
 
         # exe çevirirken kullan
-        MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
+        # MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
+        # MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+
 
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
         MainWindow.setAnimated(True)
@@ -87,7 +104,9 @@ class Ui_MainWindow(object):
         self.createbutton.setToolTip('Create Music')
         self.createbutton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(f"{replace}/images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # exe yaparken
+        # icon.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.createbutton.setIcon(icon)
         self.createbutton.setIconSize(QtCore.QSize(100, 100))
         self.createbutton.setCheckable(True)
@@ -111,7 +130,9 @@ class Ui_MainWindow(object):
 "background:rgb(226, 226, 226);")
         self.playbutton.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(f"{replace}/images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # exe yaparken
+        # icon1.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.playbutton.setIcon(icon1)
         self.playbutton.setIconSize(QtCore.QSize(50, 100))
         self.playbutton.setCheckable(True)

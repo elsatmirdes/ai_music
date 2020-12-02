@@ -30,6 +30,9 @@ class App(QtWidgets.QMainWindow):
         self.ui.createbutton.clicked.connect(self.createMusic)
         self.ui.playbutton.clicked.connect(self.play_music)
         self.ui.extractAction.triggered.connect(self.exit)
+        self.ui.listen_pos.triggered.connect(self.listen_pozitif)
+        self.ui.listen_notr.triggered.connect(self.listen_notr)
+        self.ui.listen_neg.triggered.connect(self.listen_negatif)
 
     def play_music(self):
         try:
@@ -59,12 +62,17 @@ class App(QtWidgets.QMainWindow):
             play_music(midi_file)
 
         except UnboundLocalError:
+            # exe yaparken
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
-            # qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
-            qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
-            qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+
+            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
+
+            # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
+            # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oynatılırken hata oluştu\nOluşturulan müzik oynatılır. Önce müzik oluştur.\n")
 
     # -1<x<1
@@ -81,12 +89,17 @@ class App(QtWidgets.QMainWindow):
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 
         except AttributeError:
+            # exe yaparken
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
-            # qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
-            qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
-            qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+
+            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
+
+            # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
+            # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu tekrar deneyin.\nDevam ederse kapatıp tekrar açın.\n")
 
     # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
@@ -238,12 +251,16 @@ class App(QtWidgets.QMainWindow):
             time += 1
 
     def createMusic(self):
+        # exe yaparken
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
         qmsgBox = QMessageBox()
-        # qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
-        qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
 
+        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+        qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
+
+        # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
+        # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
         analiz_sonucu = self.translate_and_analysis()
         try:
@@ -261,6 +278,39 @@ class App(QtWidgets.QMainWindow):
 
         except TypeError:
             pass
+
+    def listen_pozitif(self):
+        freq = 44100  # audio CD quality
+        bitsize = -16  # unsigned 16 bit
+        channels = 2  # 1 is mono, 2 is stereo
+        buffer = 1024  # number of samples
+        pygame.mixer.init(freq, bitsize, channels, buffer)
+
+        # optional volume 0 to 1.0
+        pygame.mixer.music.set_volume(0.8)
+        play_music("midi/musicActive.midi")
+
+    def listen_notr(self):
+        freq = 44100  # audio CD quality
+        bitsize = -16  # unsigned 16 bit
+        channels = 2  # 1 is mono, 2 is stereo
+        buffer = 1024  # number of samples
+        pygame.mixer.init(freq, bitsize, channels, buffer)
+
+        # optional volume 0 to 1.0
+        pygame.mixer.music.set_volume(0.8)
+        play_music("midi/nötrMusic.midi")
+
+    def listen_negatif(self):
+        freq = 44100  # audio CD quality
+        bitsize = -16  # unsigned 16 bit
+        channels = 2  # 1 is mono, 2 is stereo
+        buffer = 1024  # number of samples
+        pygame.mixer.init(freq, bitsize, channels, buffer)
+
+        # optional volume 0 to 1.0
+        pygame.mixer.music.set_volume(0.8)
+        play_music("midi/musicSad.midi")
 
     def exit(self):
         QtWidgets.qApp.quit()
