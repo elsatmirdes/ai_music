@@ -46,6 +46,7 @@ class Ui_MainWindow(object):
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
         MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
+        MainWindow.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
 
         # exe çevirirken kullan
         # MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
