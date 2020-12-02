@@ -29,11 +29,11 @@ class Ui_MainWindow(object):
 
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
-        MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
+        # MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
         MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
         # exe çevirirken kullan
-        # MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
+        MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
 
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
         MainWindow.setAnimated(True)
@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         self.createbutton.setToolTip('Create Music')
         self.createbutton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.createbutton.setIcon(icon)
         self.createbutton.setIconSize(QtCore.QSize(100, 100))
         self.createbutton.setCheckable(True)
@@ -111,7 +111,7 @@ class Ui_MainWindow(object):
 "background:rgb(226, 226, 226);")
         self.playbutton.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.playbutton.setIcon(icon1)
         self.playbutton.setIconSize(QtCore.QSize(50, 100))
         self.playbutton.setCheckable(True)

@@ -1,12 +1,12 @@
-from PyQt5 import QtWidgets,QtGui,QtCore
+from PyQt5 import QtWidgets,QtGui
 from PyQt5.QtWidgets import QMessageBox
 from form import Ui_MainWindow
 from pyknon.music import NoteSeq
 from pyknon.genmidi import Midi
 from annotated_turkish_syllables import get_syllables
-from googletrans import Translator
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from listen import play_music
+from google_trans_new import google_translator
 import pygame
 import sys
 import os
@@ -20,12 +20,12 @@ class App(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.translator = google_translator()
+
         if os.path.isdir("midi"):
             pass
         else:
             os.mkdir("midi")
-
-        self.translator = Translator()
 
         self.ui.createbutton.clicked.connect(self.createMusic)
         self.ui.playbutton.clicked.connect(self.play_music)
@@ -62,7 +62,8 @@ class App(QtWidgets.QMainWindow):
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
-            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            # qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
             qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oynatılırken hata oluştu\nOluşturulan müzik oynatılır. Önce müzik oluştur.\n")
 
@@ -71,19 +72,20 @@ class App(QtWidgets.QMainWindow):
         try:
             # translate
             metin = self.ui.sentence.toPlainText() # cümle alınır
-            translation = self.translator.translate(metin) # ingilizceye çevirilir
-            metin_eng = translation.text
+            translate = self.translator.translate(metin)
 
             # analysis
             sid = SentimentIntensityAnalyzer()
-            positive_or_negative = sid.polarity_scores(metin_eng)
+            positive_or_negative = sid.polarity_scores(translate)
+
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 
         except AttributeError:
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
-            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            # qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
             qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu tekrar deneyin.\nDevam ederse kapatıp tekrar açın.\n")
 
@@ -239,7 +241,8 @@ class App(QtWidgets.QMainWindow):
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
         qmsgBox = QMessageBox()
-        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+        # qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+        qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
 
 
         analiz_sonucu = self.translate_and_analysis()
