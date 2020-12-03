@@ -88,7 +88,7 @@ class App(QtWidgets.QMainWindow):
 
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 
-        except AttributeError:
+        except Exception:
             # exe yaparken
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
@@ -100,7 +100,7 @@ class App(QtWidgets.QMainWindow):
             # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
             # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
-            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu tekrar deneyin.\nDevam ederse kapatıp tekrar açın.\n")
+            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu. İnternet bağlantınızı kontrol edin\nDevam ederse kapatıp tekrar açın.\n")
 
     # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
     def nota_number(self):
@@ -250,34 +250,6 @@ class App(QtWidgets.QMainWindow):
             midi.write("midi/nötrMusic.midi")
             time += 1
 
-    def createMusic(self):
-        # exe yaparken
-        location_file = str(os.getcwd())
-        replace = location_file.replace("\\", "/")
-        qmsgBox = QMessageBox()
-
-        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
-        qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
-
-        # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
-        # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
-
-        analiz_sonucu = self.translate_and_analysis()
-        try:
-            if analiz_sonucu > 0.0:
-                QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
-                self.active_music()
-
-            elif analiz_sonucu < 0.0:
-                QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
-                self.sad_music()
-
-            elif analiz_sonucu == 0.0:
-                QMessageBox.information(qmsgBox, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
-                self.notr_music()
-
-        except TypeError:
-            pass
 
     def listen_pozitif(self):
         freq = 44100  # audio CD quality
@@ -311,6 +283,35 @@ class App(QtWidgets.QMainWindow):
         # optional volume 0 to 1.0
         pygame.mixer.music.set_volume(0.8)
         play_music("midi/musicSad.midi")
+
+    def createMusic(self):
+        # exe yaparken
+        location_file = str(os.getcwd())
+        replace = location_file.replace("\\", "/")
+        qmsgBox = QMessageBox()
+
+        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+        qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
+
+        # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
+        # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
+
+        analiz_sonucu = self.translate_and_analysis()
+        try:
+            if analiz_sonucu > 0.0:
+                QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+                self.active_music()
+
+            elif analiz_sonucu < 0.0:
+                QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+                self.sad_music()
+
+            elif analiz_sonucu == 0.0:
+                QMessageBox.information(qmsgBox, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
+                self.notr_music()
+
+        except TypeError:
+            pass
 
     def exit(self):
         QtWidgets.qApp.quit()
