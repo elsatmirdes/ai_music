@@ -40,7 +40,6 @@ pip install pygame
 ```
 python main.py
 ```
-* *Projenin exe halini [burdan](https://dosya.co/rz4x5a3ayjal/main.exe.html) indirebilirsiniz.*
 
 ## Suggestions
 
