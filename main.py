@@ -62,16 +62,12 @@ class App(QtWidgets.QMainWindow):
             play_music(midi_file)
 
         except UnboundLocalError:
-            # exe yaparken
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
 
-            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\ncolor:black;\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
             qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
-
-            # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
-            # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oynatılırken hata oluştu\nOluşturulan müzik oynatılır. Önce müzik oluştur.\n")
 
@@ -89,18 +85,15 @@ class App(QtWidgets.QMainWindow):
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 
         except Exception:
-            # exe yaparken
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
 
-            qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+            qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\ncolor:black;\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
             qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
 
-            # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
-            # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
-            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu. İnternet bağlantınızı kontrol edin\nDevam ederse kapatıp tekrar açın.\n")
+            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu. İnternet bağlantınızı kontrol edin\n")
 
     # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
     def nota_number(self):
@@ -285,25 +278,21 @@ class App(QtWidgets.QMainWindow):
         play_music("midi/musicSad.midi")
 
     def createMusic(self):
-        # exe yaparken
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
         qmsgBox = QMessageBox()
 
-        qmsgBox.setStyleSheet(f"background:url({replace}/images/bg.jpg); color: white;")
+        qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\ncolor:black;\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
         qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
-
-        # qmsgBox.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg); color: white;")
-        # qmsgBox.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
         analiz_sonucu = self.translate_and_analysis()
         try:
             if analiz_sonucu > 0.0:
-                QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+                QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluşturuldu.\n")
                 self.active_music()
 
             elif analiz_sonucu < 0.0:
-                QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluştruldu.\n")
+                QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluşturuldu.\n")
                 self.sad_music()
 
             elif analiz_sonucu == 0.0:

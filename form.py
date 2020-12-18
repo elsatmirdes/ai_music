@@ -36,21 +36,17 @@ class Ui_MainWindow(object):
         mainMenu = MainWindow.menuBar()
         fileMenu = mainMenu.addMenu("&File") # menubar help
         mainMenu.setStyleSheet("color:green;")
+
         fileMenu.addAction(self.extractAction)
         fileMenu.addAction(self.listen_pos)
         fileMenu.addAction(self.listen_notr)
         fileMenu.addAction(self.listen_neg)
 
 
-
         location_file = str(os.getcwd())
         replace = location_file.replace("\\", "/")
         MainWindow.setStyleSheet(f"background:url({replace}/images/bg.jpg);")
         MainWindow.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
-
-        # exe çevirirken kullan
-        # MainWindow.setStyleSheet("background:url(C:/Users/user/Desktop/mid/images/bg.jpg);")
-        # MainWindow.setWindowIcon(QtGui.QIcon("C:/Users/user/Desktop/mid/images/indir.png"))
 
 
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
@@ -73,7 +69,7 @@ class Ui_MainWindow(object):
         self.sentence.setAcceptDrops(True)
         self.sentence.setStyleSheet("border-radius: 10px;\n"
 "color:#FFF;\n"
-"background:black rgba(0,0,0,0.9);\n"
+"background:rgb(0,0,0,0.9);\n"
 "padding-left: 15px;\n"
 "font: 75 12pt \"System\";\n"
 "")
@@ -106,8 +102,6 @@ class Ui_MainWindow(object):
         self.createbutton.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(f"{replace}/images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # exe yaparken
-        # icon.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/createimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.createbutton.setIcon(icon)
         self.createbutton.setIconSize(QtCore.QSize(100, 100))
         self.createbutton.setCheckable(True)
@@ -132,8 +126,6 @@ class Ui_MainWindow(object):
         self.playbutton.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(f"{replace}/images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # exe yaparken
-        # icon1.addPixmap(QtGui.QPixmap("C:/Users/user/Desktop/mid/images/playimage.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.playbutton.setIcon(icon1)
         self.playbutton.setIconSize(QtCore.QSize(50, 100))
         self.playbutton.setCheckable(True)
