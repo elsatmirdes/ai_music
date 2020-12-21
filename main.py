@@ -20,8 +20,6 @@ class App(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.translator = google_translator()
-
         if os.path.isdir("midi"):
             pass
         else:
@@ -34,9 +32,10 @@ class App(QtWidgets.QMainWindow):
         self.ui.listen_notr.triggered.connect(self.listen_notr)
         self.ui.listen_neg.triggered.connect(self.listen_negatif)
 
+
     def play_music(self):
+        pos_or_neg = self.translate_and_analysis()
         try:
-            pos_or_neg = self.translate_and_analysis()
             if pos_or_neg < 0.0:
                 midi_file = 'midi/musicSad.midi'
 
@@ -48,7 +47,6 @@ class App(QtWidgets.QMainWindow):
 
         except TypeError:
             pass
-
 
         freq = 44100  # audio CD quality
         bitsize = -16  # unsigned 16 bit
@@ -73,14 +71,15 @@ class App(QtWidgets.QMainWindow):
 
     # -1<x<1
     def translate_and_analysis(self):
+        translator = google_translator()
         try:
             # translate
             metin = self.ui.sentence.toPlainText() # cümle alınır
-            translate = self.translator.translate(metin)
+            translate = translator.translate(metin)
 
             # analysis
             sid = SentimentIntensityAnalyzer()
-            positive_or_negative = sid.polarity_scores(translate)
+            positive_or_negative = sid.polarity_scores(translate).get("compound")
 
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 
@@ -243,7 +242,6 @@ class App(QtWidgets.QMainWindow):
             midi.write("midi/nötrMusic.midi")
             time += 1
 
-
     def listen_pozitif(self):
         freq = 44100  # audio CD quality
         bitsize = -16  # unsigned 16 bit
@@ -290,15 +288,12 @@ class App(QtWidgets.QMainWindow):
             if analiz_sonucu > 0.0:
                 QMessageBox.information(qmsgBox,"Created Music","\nPozitif (+) cümle girdiniz. Müzik başarıyla oluşturuldu.\n")
                 self.active_music()
-
             elif analiz_sonucu < 0.0:
                 QMessageBox.information(qmsgBox, "Created Music", "\nNegatif (-) cümle girdiniz. Müzik başarıyla oluşturuldu.\n")
                 self.sad_music()
-
             elif analiz_sonucu == 0.0:
                 QMessageBox.information(qmsgBox, "Created Music", "\nNötr cümle girdiniz. Müzik başarıyla oluşturuldu\n")
                 self.notr_music()
-
         except TypeError:
             pass
 
