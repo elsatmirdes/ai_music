@@ -94,7 +94,7 @@ class App(QtWidgets.QMainWindow):
 
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu. İnternet bağlantınızı kontrol edin\n")
 
-    # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota akor döndürür)
+    # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota-akor döndürür)
     def nota_number(self):
         metin = self.ui.sentence.toPlainText()
         syllables = get_syllables(u'{}'.format(metin))
@@ -172,7 +172,7 @@ class App(QtWidgets.QMainWindow):
         }
 
         dur = {
-            "2", "4", "8", "16"
+            "2","8"
         }
 
         if self.translate_and_analysis() > 0.0 or self.translate_and_analysis() < 0.3000:
@@ -186,10 +186,10 @@ class App(QtWidgets.QMainWindow):
 
         for i in range(self.nota_number()):
             midi = Midi(2, tempo=tempo, channel=[0,9], instrument=[20,40,60])
-            midi.seq_notes(self.nota(A_major,dur), track=0, channel=2)
-            midi.seq_notes(self.nota(A_major,dur), track=1, channel=9)
-            # midi.seq_chords(self.active_chord(), track=0, channel=1)
+            midi.seq_notes(self.nota(A_major,dur), track=0, channel=9)
+            midi.seq_notes(self.nota(A_major,dur), track=1, channel=0)
             midi.seq_chords(self.active_chord(), track=0, channel=1)
+            midi.seq_chords(self.active_chord(), track=1, channel=3)
             midi.write(f"midi/musicActive.midi")
 
         print(tempo)
