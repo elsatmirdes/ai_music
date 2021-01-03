@@ -5,7 +5,7 @@ from pyknon.music import NoteSeq
 from pyknon.genmidi import Midi
 from annotated_turkish_syllables import get_syllables
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from google_trans_new import google_translator
+from googletrans import Translator
 from listen import play_music
 import pygame
 import sys
@@ -71,7 +71,7 @@ class App(QtWidgets.QMainWindow):
 
     # -1<x<1
     def translate_and_analysis(self):
-        translator = google_translator()
+        translator = Translator()
         try:
             # translate
             metin = self.ui.sentence.toPlainText() # cümle alınır
@@ -79,7 +79,7 @@ class App(QtWidgets.QMainWindow):
 
             # analysis
             sid = SentimentIntensityAnalyzer()
-            positive_or_negative = sid.polarity_scores(translate).get("compound")
+            positive_or_negative = sid.polarity_scores(translate.text).get("compound")
 
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 

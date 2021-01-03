@@ -1,6 +1,6 @@
 # Türkçe metinlerden duygu analizi ile bilgisayar destekli müzik üretme
 
-Projede girilen cümle öncelikle **google_trans_new** kütüphanesiyle ingilizceye çevirilir çünü duygu analizini yapmak için **nltk** kütüphanesi kullanılır ki bu kütüphanede ingilizce dili ile çalışmaktadır.
+Projede girilen cümle öncelikle **googletrans** kütüphanesiyle ingilizceye çevirilir çünü duygu analizini yapmak için **nltk** kütüphanesi kullanılır ki bu kütüphanede ingilizce dili ile çalışmaktadır.
 
 Ve nltk kütüphanesinden gelen **Pozitif Nötr Negatif** sonucuna göre müzik üretilir.
 
@@ -17,9 +17,9 @@ Python 3.7 ve üzeri bilgisayarınızda kurulu olması gerekir eğer kurulu değ
 pip install pyqt5
 ```
 
-**Google_trans_new**
+**Googletrans**
 ```
-pip install google_trans_new
+pip install googletrans==3.1.0a0
 ```
 
 **Nltk**
