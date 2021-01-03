@@ -32,7 +32,6 @@ class App(QtWidgets.QMainWindow):
         self.ui.listen_notr.triggered.connect(self.listen_notr)
         self.ui.listen_neg.triggered.connect(self.listen_negatif)
 
-
     def play_music(self):
         pos_or_neg = self.translate_and_analysis()
         try:
