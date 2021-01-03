@@ -5,8 +5,8 @@ from pyknon.music import NoteSeq
 from pyknon.genmidi import Midi
 from annotated_turkish_syllables import get_syllables
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from listen import play_music
 from google_trans_new import google_translator
+from listen import play_music
 import pygame
 import sys
 import os
@@ -24,6 +24,7 @@ class App(QtWidgets.QMainWindow):
             pass
         else:
             os.mkdir("midi")
+
 
         self.ui.createbutton.clicked.connect(self.createMusic)
         self.ui.playbutton.clicked.connect(self.play_music)

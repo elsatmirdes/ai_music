@@ -4,6 +4,7 @@ Projede girilen cümle öncelikle **google_trans_new** kütüphanesiyle ingilizc
 
 Ve nltk kütüphanesinden gelen **Pozitif Nötr Negatif** sonucuna göre müzik üretilir.
 
+Müzik oluşturmak için kullanılan pyknon kütüphanesi hazır halde klasör içinde bulunmaktadır.
 
 ## Prerequisites
 Python 3.7 ve üzeri bilgisayarınızda kurulu olması gerekir eğer kurulu değilse [Python Kurulum](https://www.python.org) tıklayarak kurulumu yapabilirsiniz.
@@ -26,9 +27,9 @@ pip install google_trans_new
 pip install nltk
 ```
 
-**Pyknon**
+**Requests**
 ```
-pip install pyknon
+pip install requests
 ```
 
 **Pygame**
