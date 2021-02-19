@@ -91,7 +91,6 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setStyleSheet("font:bold 14px;\n"
-"color:black;\n"
 "background:rgb(2, 37, 102);\n"
 "border-style: outset;\n"
 "border-width:2px;\n"

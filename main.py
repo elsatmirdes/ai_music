@@ -6,6 +6,7 @@ from pyknon.genmidi import Midi
 from annotated_turkish_syllables import get_syllables
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from googletrans import Translator
+import nltk
 from listen import play_music
 import pygame
 import sys
@@ -64,7 +65,7 @@ class App(QtWidgets.QMainWindow):
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
 
-            qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\ncolor:black;\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
+            qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
             qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
 
             QMessageBox.critical(qmsgBox, "Error", "\nMüzik oynatılırken hata oluştu\nOluşturulan müzik oynatılır. Önce müzik oluştur.\n")
@@ -78,6 +79,11 @@ class App(QtWidgets.QMainWindow):
             translate = translator.translate(metin)
 
             # analysis
+            try:
+                pass
+            except Exception:
+                nltk.download('vader_lexicon')
+
             sid = SentimentIntensityAnalyzer()
             positive_or_negative = sid.polarity_scores(translate.text).get("compound")
 
@@ -88,7 +94,7 @@ class App(QtWidgets.QMainWindow):
             replace = location_file.replace("\\", "/")
             qmsgBox = QMessageBox()
 
-            qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\ncolor:black;\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
+            qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
             qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
 
 
@@ -280,7 +286,7 @@ class App(QtWidgets.QMainWindow):
         replace = location_file.replace("\\", "/")
         qmsgBox = QMessageBox()
 
-        qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\ncolor:black;\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
+        qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
         qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
 
         analiz_sonucu = self.translate_and_analysis()
