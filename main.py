@@ -79,10 +79,8 @@ class App(QtWidgets.QMainWindow):
             translate = translator.translate(metin)
 
             # analysis
-            try:
-                pass
-            except Exception:
-                nltk.download('vader_lexicon')
+
+            nltk.download('vader_lexicon')
 
             sid = SentimentIntensityAnalyzer()
             positive_or_negative = sid.polarity_scores(translate.text).get("compound")
