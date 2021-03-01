@@ -79,24 +79,23 @@ class App(QtWidgets.QMainWindow):
             translate = translator.translate(metin)
 
             # analysis
-
-            nltk.download('vader_lexicon')
-
             sid = SentimentIntensityAnalyzer()
             positive_or_negative = sid.polarity_scores(translate.text).get("compound")
 
             return positive_or_negative  # -1 ile 1 arasında değer döndürür (float)
 
         except Exception:
+            nltk.download('vader_lexicon')
             location_file = str(os.getcwd())
             replace = location_file.replace("\\", "/")
+
             qmsgBox = QMessageBox()
 
             qmsgBox.setStyleSheet("background:rgb(207,179,255,0.9);\nfont: 75 10pt 'MS Shell Dlg 2';\nQPushButton{background-color: blue;}")
             qmsgBox.setWindowIcon(QtGui.QIcon(f"{replace}/images/indir.png"))
 
 
-            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu. İnternet bağlantınızı kontrol edin\n")
+            QMessageBox.critical(qmsgBox, "Error", "\nMüzik oluştururken hata oluştu. Düzeltme yapıldı tekrar deneyin\n")
 
     # nota number - kaç nota ve akordan oluşmasını belirler (cümleyi hecelerine ayırır ve hece kadar nota-akor döndürür)
     def nota_number(self):
